@@ -44,11 +44,6 @@ def is_goal(state):
     if state==[[1, 2, 3], [4, 5, 6], [7, 8, ' ']]:
         return True
 
-def dequeue(queue):
-    for i in range(len(queue)-1):
-        queue[i]=queue[i+1]
-    return queue
-
 # Have to try to improve how i store the states of the game and implement a more efficient way of doing things
 def BFS(state):
     visited=[]
@@ -67,7 +62,7 @@ def BFS(state):
                     visited.append(next_state)
                     queue.append([next_state,next_row,next_column])
                     parent_states[tuple(tuple(inner) for inner in next_state)]=tuple(tuple(inner) for inner in state)
-        dequeue(queue)
+        queue.pop(0)
     backtrack(parent_states)
 
 def backtrack(parent_states,cur_state=((1, 2, 3), (4, 5, 6), (7, 8, ' '))):
