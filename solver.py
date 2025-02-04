@@ -1,5 +1,5 @@
 import copy
-state=[[' ',2,3],[1,4,5],[7,8,6]] #make a function to accept initial state
+state=[[4,' ',1],[3,8,6],[2,5,7]] #make a function to accept initial state
 #make a function to check if a solution is feasible for a given initial state
 def move(state,move,row,column):
     if move=="l":
@@ -46,8 +46,8 @@ def is_goal(state):
 
 # Have to try to improve how i store the states of the game and implement a more efficient way of doing things
 def BFS(state):
-    visited=[]
-    queue=[[state,0,0]]
+    visited=set()
+    queue=[[state,0,1]]
     parent_states={}
     while(True):
         state=queue[0][0]
@@ -58,15 +58,16 @@ def BFS(state):
         for whatmove,possible in moves.items():
             if possible:
                 next_state,next_row,next_column=move(copy.deepcopy(state),whatmove,row,column)
-                if(next_state not in visited):
-                    visited.append(next_state)
+                new=tuple(tuple(inner) for inner in next_state)
+                if(new not in visited):
+                    visited.add(new)
                     queue.append([next_state,next_row,next_column])
-                    parent_states[tuple(tuple(inner) for inner in next_state)]=tuple(tuple(inner) for inner in state)
+                    parent_states[new]=tuple(tuple(inner) for inner in state)
         queue.pop(0)
     backtrack(parent_states)
 
 def backtrack(parent_states,cur_state=((1, 2, 3), (4, 5, 6), (7, 8, ' '))):
-    if(cur_state!=(((' ',2,3),(1,4,5),(7,8,6)))):
+    if(cur_state!=((4,' ',1),(3,8,6),(2,5,7))):
         backtrack(parent_states,parent_states[cur_state])
     print_state(cur_state)
 BFS(copy.deepcopy(state))
